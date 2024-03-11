@@ -29,6 +29,7 @@ Google Colab with NVCC Compiler
 6. Copy output data from the device to the host and verify the results against the host's sequential vector addition. Free memory on the host and the device.
 
 ## PROGRAM:
+
 %%cuda
 #include <sys/time.h>
 
@@ -165,18 +166,18 @@ int main(int argc, char **argv)
 {
     printf("%s Starting...\n", argv[0]);
 
-    // set up device
+// set up device
     int dev = 0;
     cudaDeviceProp deviceProp;
     CHECK(cudaGetDeviceProperties(&deviceProp, dev));
     printf("Using Device %d: %s\n", dev, deviceProp.name);
     CHECK(cudaSetDevice(dev));
 
-    // set up data size of vectors
+// set up data size of vectors
     int nElem = 1 << 24;
     printf("Vector size %d\n", nElem);
 
-    // malloc host memory
+// malloc host memory
     size_t nBytes = nElem * sizeof(float);
 
     float *h_A, *h_B, *hostRef, *gpuRef;
@@ -187,7 +188,7 @@ int main(int argc, char **argv)
 
     double iStart, iElaps;
 
-    // initialize data at host side
+// initialize data at host side
     iStart = seconds();
     initialData(h_A, nElem);
     initialData(h_B, nElem);
@@ -196,56 +197,56 @@ int main(int argc, char **argv)
     memset(hostRef, 0, nBytes);
     memset(gpuRef,  0, nBytes);
 
-    // add vector at host side for result checks
+// add vector at host side for result checks
     iStart = seconds();
     sumArraysOnHost(h_A, h_B, hostRef, nElem);
     iElaps = seconds() - iStart;
     printf("sumArraysOnHost Time elapsed %f sec\n", iElaps);
 
-    // malloc device global memory
+// malloc device global memory
     float *d_A, *d_B, *d_C;
     CHECK(cudaMalloc((float**)&d_A, nBytes));
     CHECK(cudaMalloc((float**)&d_B, nBytes));
     CHECK(cudaMalloc((float**)&d_C, nBytes));
 
-    // transfer data from host to device
+// transfer data from host to device
     CHECK(cudaMemcpy(d_A, h_A, nBytes, cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(d_B, h_B, nBytes, cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(d_C, gpuRef, nBytes, cudaMemcpyHostToDevice));
 
-    // invoke kernel at host side
+// invoke kernel at host side
     int iLen = 512;
     dim3 block (iLen);
     dim3 grid  ((nElem + block.x - 1) / block.x);
 
-    iStart = seconds();
+ iStart = seconds();
     sumArraysOnGPU<<<grid, block>>>(d_A, d_B, d_C, nElem);
     CHECK(cudaDeviceSynchronize());
     iElaps = seconds() - iStart;
     printf("sumArraysOnGPU <<<  %d, %d  >>>  Time elapsed %f sec\n", grid.x,
            block.x, iElaps);
 
-    // check kernel error
+// check kernel error
     CHECK(cudaGetLastError()) ;
 
-    // copy kernel result back to host side
+// copy kernel result back to host side
     CHECK(cudaMemcpy(gpuRef, d_C, nBytes, cudaMemcpyDeviceToHost));
 
-    // check device results
+// check device results
     checkResult(hostRef, gpuRef, nElem);
 
-    // free device global memory
+// free device global memory
     CHECK(cudaFree(d_A));
     CHECK(cudaFree(d_B));
     CHECK(cudaFree(d_C));
 
-    // free host memory
+// free host memory
     free(h_A);
     free(h_B);
     free(hostRef);
     free(gpuRef);
 
-    return(0);
+return(0);
 }
 
 ## OUTPUT:
