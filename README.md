@@ -433,12 +433,12 @@ return(0);
 
 ## OUTPUT:
 
-![output](https://github.com/maha712/PCA-EXP-1-SUM-ARRAY-GPU-AY-23-24/assets/121156360/80296bb7-f247-45d3-960f-e33c7eaebc9a)
+![output](https://github.com/maha712/PCA-EXP-1-SUM-ARRAY-GPU-AY-23-24/assets/121156360/197df347-7a0c-4483-8d02-3118100ee988)
 
-![block x=1023](https://github.com/maha712/PCA-EXP-1-SUM-ARRAY-GPU-AY-23-24/assets/121156360/a105297c-724f-41f0-a868-8a91bf9368a3)
+![block x=1023](https://github.com/maha712/PCA-EXP-1-SUM-ARRAY-GPU-AY-23-24/assets/121156360/e3b031b4-9026-429c-832e-849784d26f43)
 
-![block x=256](https://github.com/maha712/PCA-EXP-1-SUM-ARRAY-GPU-AY-23-24/assets/121156360/e1d85615-069c-41aa-8a43-d7068b0e2faf)
 
+![block x=256](https://github.com/maha712/PCA-EXP-1-SUM-ARRAY-GPU-AY-23-24/assets/121156360/932298dc-71a9-46fa-b88e-e0264cfa918c)
 
 ## RESULT:
 Thus, Implementation of sum arrays on host and device is done in nvcc cuda using random number.
